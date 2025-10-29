@@ -31,7 +31,3 @@
    👩‍💻 *Created by Merin Magi Telson*
 
    ```
-
-
-
-Would you like me to give you a **README template with clickable badges (Java, Spring Boot, MySQL, etc.)** — so it looks professional like open-source repos?
