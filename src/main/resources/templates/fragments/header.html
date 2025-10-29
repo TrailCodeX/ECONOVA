@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+	<div th:fragment="navbar">
+		<nav
+			style="background-color: #ffffff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 100;">
+			<h1
+				style="font-size: 26px; color: #27ae60; font-weight: 700; letter-spacing: -0.5px;">🌿
+				EcoNova</h1>
+			<div style="display: flex; gap: 2rem;">
+				
+				<a href="/customerhome"
+					style="color: #34495e; text-decoration: none; font-weight: 500; font-size: 14px;">🏠
+					Home</a> <a href="/about"
+					style="color: #34495e; text-decoration: none; font-weight: 500; font-size: 14px;">ℹ️
+					About</a> <a href="/contact"
+					style="color: #34495e; text-decoration: none; font-weight: 500; font-size: 14px;">📞
+					Contact</a> <a href="/cart/view"
+					style="color: #34495e; text-decoration: none; font-weight: 500; font-size: 14px;">🛒
+					Cart</a> <a href="/logout"
+					style="color: #34495e; text-decoration: none; font-weight: 500; font-size: 14px;">🚪
+					Logout</a>
+			</div>
+		</nav>
+	</div>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNova | Payment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .payment-header h1 {
+            color: #27ae60;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .payment-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .amount-display {
+            background: #f0f7ff;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .amount-display .label {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .amount-display .amount {
+            color: #27ae60;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .payment-btn {
+            width: 100%;
+            padding: 14px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .payment-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+        }
+
+        .payment-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #bdc3c7;
+        }
+
+        .security-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+
+        .security-info span {
+            margin: 0 5px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #27ae60;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .order-details {
+            background: #f8fbf9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .order-details p {
+            margin: 8px 0;
+            color: #2c3e50;
+        }
+
+        .order-details strong {
+            color: #27ae60;
+        }
+
+        .error-message {
+            display: none;
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #f5c6cb;
+        }
+
+        @media (max-width: 480px) {
+            .payment-container {
+                padding: 25px;
+            }
+
+            .payment-header h1 {
+                font-size: 24px;
+            }
+
+            .amount-display .amount {
+                font-size: 28px;
+            }
+
+            .payment-btn,
+            .back-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <h1>💳 Payment</h1>
+            <p>Complete your order securely</p>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="amount-display">
+            <span class="label">Total Amount to Pay</span>
+            <div class="amount">₹<span id="displayAmount" th:text="${#numbers.formatInteger(amount, 0)}">0</span></div>
+        </div>
+
+        <div class="order-details">
+            <p><strong>Order ID:</strong> <span id="orderId">Generating...</span></p>
+            <p><strong>Payment Method:</strong> Razorpay (Credit/Debit Card, UPI, Wallet)</p>
+            <p><strong>Status:</strong> <span style="color: #e67e22;">Pending</span></p>
+        </div>
+
+        <div id="paymentForm">
+            <button type="button" class="payment-btn" onclick="initiatePayment()" id="payBtn">
+                💳 Pay Now with Razorpay
+            </button>
+            <button type="button" class="back-btn" onclick="goBack()">
+                ← Go Back to Cart
+            </button>
+        </div>
+
+        <div id="loadingDiv" class="loading">
+            <div class="spinner"></div>
+            <p>Processing payment...</p>
+        </div>
+
+        <div class="security-info">
+            <span>🔒</span>
+            <span>Secure payment powered by Razorpay</span>
+        </div>
+    </div>
+
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        // Get amount from Thymeleaf
+        const amount = parseFloat(document.getElementById('displayAmount').textContent.replace(/,/g, ''));
+        const razorpayKey = '[[${razorpayKey}]]'; // ✅ Get key from server
+
+        // Function to show error
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('paymentForm').style.display = 'block';
+            document.getElementById('loadingDiv').style.display = 'none';
+        }
+
+        // Function to go back
+        function goBack() {
+            window.history.back();
+        }
+
+        // Main payment function
+        function initiatePayment() {
+            // Hide form and show loading
+            document.getElementById('paymentForm').style.display = 'none';
+            document.getElementById('loadingDiv').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+
+            // Create Razorpay order on backend
+            const paymentAmount = Math.round(amount * 100); // Convert to paise
+
+            fetch('/payment/createOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'amount=' + paymentAmount
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        showError('Error creating order: ' + data.error);
+                        return;
+                    }
+
+                    if (!data.id) {
+                        showError('Order ID not received from server');
+                        return;
+                    }
+
+                    // Display order ID
+                    document.getElementById('orderId').textContent = data.id;
+
+                    // Razorpay Options
+                    const options = {
+                        key: razorpayKey, // ✅ Use key from server
+                        amount: paymentAmount,
+                        currency: 'INR',
+                        name: 'EcoNova',
+                        description: 'Order Payment',
+                        order_id: data.id,
+                        handler: function (response) {
+                            // Payment successful
+                            completePayment(response);
+                        },
+                        prefill: {
+                            email: 'customer@example.com',
+                            contact: '9999999999'
+                        },
+                        theme: {
+                            color: '#27ae60'
+                        },
+                        modal: {
+                            ondismiss: function () {
+                                showError('Payment cancelled by user');
+                            }
+                        }
+                    };
+
+                    // Open Razorpay Checkout
+                    const razorpay = new Razorpay(options);
+                    razorpay.open();
+
+                    // Handle payment window close
+                    razorpay.on('payment.failed', function (response) {
+                        showError('Payment failed: ' + response.error.description);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Error initiating payment. Please try again.');
+                });
+        }
+
+        // Complete payment after successful Razorpay response
+        function completePayment(response) {
+            document.getElementById('paymentForm').style.display = 'none';
+            document.getElementById('loadingDiv').style.display = 'block';
+
+            // Send payment details to backend
+            fetch('/payment/success', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'razorpayPaymentId=' + response.razorpay_payment_id +
+                    '&razorpayOrderId=' + response.razorpay_order_id +
+                    '&razorpaySignature=' + response.razorpay_signature
+            })
+                .then(response => response.text())
+                .then(result => {
+                    // Redirect to success page
+                    window.location.href = '/payment/success';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError('Error completing payment. Please contact support.');
+                });
+        }
+    </script>
+</body>
+
+</html>

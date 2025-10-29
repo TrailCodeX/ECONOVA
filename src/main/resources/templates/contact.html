@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - EcoNova</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafbfc;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav h1 { font-size: 26px; color: #27ae60; font-weight: 700; }
+        nav div { display: flex; gap: 2rem; align-items: center; }
+        nav a {
+            color: #34495e;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+        nav a:hover { color: #27ae60; }
+        nav a.active { color: #27ae60; font-weight: 600; }
+
+        /* Main Content */
+        main { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 12px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            color: #27ae60;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        .hero p {
+            font-size: 20px;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Contact Container */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .contact-form h2 {
+            font-size: 28px;
+            color: #27ae60;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: #229954;
+        }
+
+        /* Contact Info */
+        .contact-info {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .contact-info h2 {
+            font-size: 28px;
+            color: #27ae60;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        .info-item {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+        .info-item .icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        .info-item h3 {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .info-item p {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+        }
+        .info-item a {
+            color: #27ae60;
+            text-decoration: none;
+        }
+        .info-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-weight: 500;
+        }
+
+        /* Map Section */
+        .map-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .map-section h2 {
+            font-size: 28px;
+            color: #27ae60;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        .map-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            .contact-form,
+            .contact-info,
+            .map-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <h1>🌿 EcoNova</h1>
+        <div>
+            <a th:href="@{/customerhome}">🏠 Home</a>
+            <a th:href="@{/about}">ℹ️ About</a>
+            <a th:href="@{/contact}" class="active">📞 Contact</a>
+            <a th:href="@{/cart/view}">🛒 Cart</a>
+            <a th:href="@{/logout}">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Get in Touch</h1>
+            <p>We'd love to hear from you! Send us a message and we'll respond as soon as possible.</p>
+        </section>
+
+        <!-- Contact Container -->
+        <div class="contact-container">
+            <!-- Contact Form -->
+            <div class="contact-form">
+                <h2>Send us a Message</h2>
+                
+                <!-- Success Message -->
+                <div class="success-message" th:if="${successMessage}" th:text="${successMessage}"></div>
+                
+                <form th:action="@{/contact/submit}" method="post">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <input type="text" id="subject" name="subject" required placeholder="What is this about?">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" name="message" required placeholder="Tell us more about your inquiry..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <h2>Contact Information</h2>
+                
+                <div class="info-item">
+                    <div class="icon">📍</div>
+                    <div>
+                        <h3>Our Address</h3>
+                        <p>
+                            EcoNova Headquarters<br>
+                            123 Green Street, Eco Plaza<br>
+                            Kochi, Kerala 682001<br>
+                            India
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="icon">📧</div>
+                    <div>
+                        <h3>Email Us</h3>
+                        <p>
+                            General: <a href="mailto:info@econova.com">info@econova.com</a><br>
+                            Support: <a href="mailto:support@econova.com">support@econova.com</a><br>
+                            Sales: <a href="mailto:sales@econova.com">sales@econova.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="icon">📞</div>
+                    <div>
+                        <h3>Call Us</h3>
+                        <p>
+                            Customer Service: <a href="tel:+911234567890">+91 123 456 7890</a><br>
+                            Business Inquiries: <a href="tel:+911234567891">+91 123 456 7891</a><br>
+                            Mon - Sat: 9:00 AM - 6:00 PM IST
+                        </p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="icon">🕐</div>
+                    <div>
+                        <h3>Business Hours</h3>
+                        <p>
+                            Monday - Friday: 9:00 AM - 6:00 PM<br>
+                            Saturday: 10:00 AM - 4:00 PM<br>
+                            Sunday: Closed
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <section class="map-section">
+            <h2>Find Us on Map</h2>
+            <div class="map-placeholder">🗺️</div>
+        </section>
+    </main>
+</body>
+</html>

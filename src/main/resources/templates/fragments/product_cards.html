@@ -1,0 +1,13 @@
+<div th:fragment="cards(products)">
+    <div th:if="${#lists.isEmpty(products)}">
+        <p>No products found for this subcategory.</p>
+    </div>
+    <div th:each="prod : ${products}" class="product-card">
+        <img th:src="@{${prod.imageUrl}}" alt="Product Image" width="150">
+        <h3 th:text="${prod.name}"></h3>
+        <p th:text="${prod.description}"></p>
+        <p>Price: $<span th:text="${prod.price}"></span></p>
+        <p>Quantity: <span th:text="${prod.quantity}"></span></p>
+        <p>Subcategory: <span th:text="${prod.subcategory.name}"></span></p>
+    </div>
+</div>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Edit Subcategory</title>
+<style>
+body {
+	font-family: 'Segoe UI', sans-serif;
+	background-color: #f0f8f5;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	width: 450px;
+	margin: 50px auto;
+	background-color: white;
+	padding: 25px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+	text-align: center;
+	color: #007bff;
+	margin-bottom: 20px;
+}
+
+.form-group {
+	margin-bottom: 15px;
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	margin-bottom: 5px;
+	font-weight: 500;
+}
+
+input[type="text"], textarea, select, input[type="file"] {
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+textarea {
+	resize: vertical;
+}
+
+.btn-submit {
+	width: 100%;
+	padding: 10px;
+	background-color: #28a745;
+	border: none;
+	color: white;
+	font-weight: 600;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.btn-submit:hover {
+	background-color: #218838;
+}
+
+.view-link {
+	display: block;
+	text-align: center;
+	margin-top: 15px;
+	color: #007bff;
+	text-decoration: none;
+}
+
+.view-link:hover {
+	text-decoration: underline;
+}
+
+.alert-success {
+	color: #155724;
+	background-color: #d4edda;
+	border: 1px solid #c3e6cb;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 15px;
+	text-align: center;
+}
+
+.alert-error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 15px;
+	text-align: center;
+}
+</style>
+
+<script th:inline="javascript">
+    [[${success}]] ? setTimeout(function() {
+        window.location.href = '/admin/subcategory/manage';
+    }, 2000) : '';
+</script>
+
+</head>
+<body>
+	<div class="container">
+		<h2>Edit Subcategory</h2>
+
+		<!-- Success message -->
+		<div th:if="${success}" class="alert-success" th:text="${success}"></div>
+
+		<!-- Error message -->
+		<div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+		<form th:action="@{/admin/subcategory/update}" method="post"
+			enctype="multipart/form-data">
+			<!-- Hidden ID field -->
+			<input type="hidden" th:value="${subcategory.id}" name="id">
+
+			<div class="form-group">
+				<label for="name">Subcategory Name:</label> <input type="text"
+					id="name" name="name" th:value="${subcategory.name}" required>
+			</div>
+
+			<div class="form-group">
+				<label for="description">Description:</label>
+				<textarea id="description" name="description" required
+					th:text="${subcategory.description}"></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="category">Select Category:</label> <select id="category"
+					name="category.id" required>
+					<option th:each="cat : ${categories}" th:value="${cat.id}"
+						th:text="${cat.name}"
+						th:selected="${cat.id} == ${subcategory.category.id}"></option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label>Current Image:</label> <img th:src="${subcategory.imageUrl}"
+					style="width: 150px; display: block; margin-bottom: 10px;">
+			</div>
+
+			<div class="form-group">
+				<label for="image">Change Image:</label> <input type="file"
+					id="image" name="image">
+			</div>
+
+			<div class="form-group">
+				<button type="submit" class="btn-submit">Update Subcategory</button>
+			</div>
+		</form>
+
+		<br> <a th:href="@{/admin/subcategory/manage}" class="view-link">Back
+			to Subcategories</a>
+	</div>
+</body>
+</html>

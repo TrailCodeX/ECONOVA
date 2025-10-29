@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Add Product - EcoNova</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f5f7fa;
+        color: #2d3748;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        position: fixed;
+        left: 0; top: 0;
+        width: 260px;
+        height: 100vh;
+        background: #ffffff;
+        border-right: 1px solid #e9ecef;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+    .sidebar-header { padding: 24px 20px; border-bottom: 1px solid #e9ecef; }
+    .sidebar-header h2 { font-size: 20px; font-weight: 600; color: #212529; }
+    .sidebar-nav { padding: 16px 0; }
+    .sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #495057;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.2s;
+    }
+    .sidebar a:hover { background: #f8f9fa; color: #0d6efd; }
+    .sidebar a.active { background: #0d6efd; color: white; }
+    .sidebar-footer {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        padding: 16px 20px;
+        border-top: 1px solid #e9ecef;
+        background: #ffffff;
+    }
+    .logout-btn {
+        display: flex; align-items: center; justify-content: center;
+        gap: 8px; background: #dc3545; color: white;
+        padding: 10px; border-radius: 6px; text-decoration: none;
+        font-size: 14px; font-weight: 500; transition: background 0.2s;
+    }
+    .logout-btn:hover { background: #bb2d3b; }
+
+    /* MAIN CONTENT */
+    .main-content { margin-left: 260px; min-height: 100vh; background: #f5f7fa; }
+    .page-header {
+        background: #ffffff;
+        padding: 2rem 2.5rem;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header-left h1 { font-size: 28px; font-weight: 700; color: #212529; }
+    .header-left p { font-size: 16px; color: #6c757d; }
+    .home-btn {
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 20px; background: #0d6efd; color: white;
+        text-decoration: none; border-radius: 6px;
+        font-size: 14px; font-weight: 500; transition: all 0.2s;
+    }
+    .home-btn:hover {
+        background: #0b5ed7;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+    }
+
+    /* YOUR EXISTING FORM DESIGN */
+    .container {
+        width: 450px;
+        margin: 40px auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+    label {
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+    input, textarea, select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    textarea {
+        resize: vertical;
+    }
+    .btn-submit {
+        width: 100%;
+        padding: 10px;
+        background: #28a745;
+        border: none;
+        color: white;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .btn-submit:hover {
+        background: #218838;
+    }
+    .alert-success {
+        color: #155724;
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    .alert-error {
+        color: #721c24;
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+</style>
+
+<script th:if="${success}">
+    setTimeout(function(){ window.location.href='/admin/product/manage'; }, 2000);
+</script>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>🌿 EcoNova Admin</h2>
+    </div>
+    <div class="sidebar-nav">
+        <a href="/admin/product/manage">All Products</a>
+        <a href="/admin/product/add" class="active">Add Product</a>
+        <a href="/admin/category/manage">All Categories</a>
+        <a href="/admin/category/add">Add Category</a>
+        <a href="/admin/subcategory/manage">All Subcategories</a>
+        <a href="/admin/subcategory/add">Add Subcategory</a>
+        <a href="/admin/all">Orders</a>
+    </div>
+    <div class="sidebar-footer">
+        <a href="/logout" class="logout-btn">🚪 Logout</a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="page-header">
+        <div class="header-left">
+            <h1>Add Product</h1>
+            <p>Enter product details below</p>
+        </div>
+        <a href="/admin/home" class="home-btn">🏠 Back to Home</a>
+    </div>
+
+    <div class="container">
+        <h2>Add New Product</h2>
+
+        <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+        <form th:action="@{/admin/product/add}" th:object="${product}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Product Name:</label>
+                <input type="text" th:field="*{name}" placeholder="Enter product name" required/>
+            </div>
+            <div class="form-group">
+                <label>Description:</label>
+                <textarea th:field="*{description}" placeholder="Enter description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="number" th:field="*{price}" step="1" placeholder="Enter price" required/>
+            </div>
+            <div class="form-group">
+                <label>Quantity:</label>
+                <input type="number" th:field="*{quantity}" placeholder="Enter quantity" required/>
+            </div>
+            <div class="form-group">
+                <label>Select Subcategory:</label>
+                <select th:field="*{subcategory.id}" required>
+                    <option value="">-- Select Subcategory --</option>
+                    <option th:each="sub : ${subcategories}" th:value="${sub.id}" th:text="${sub.name}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Product Image:</label>
+                <input type="file" name="image" required/>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn-submit">Add Product</button>
+            </div>
+        </form>
+
+        <a th:href="@{/admin/product/manage}" style="text-align:center; display:block; margin-top:15px;">View All Products</a>
+    </div>
+</div>
+
+</body>
+</html>

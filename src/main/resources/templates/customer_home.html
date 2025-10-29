@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoNova | Customer Home</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #fafbfc;
+	color: #2c3e50;
+	line-height: 1.6;
+}
+
+/* Navbar */
+nav {
+	background-color: #ffffff;
+	padding: 1rem 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+nav h1 {
+	font-size: 26px;
+	color: #27ae60;
+	font-weight: 700;
+}
+
+nav div {
+	display: flex;
+	gap: 2rem;
+	align-items: center;
+}
+
+nav a {
+	color: #34495e;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+nav a:hover {
+	color: #27ae60;
+}
+
+.cart-link {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.cart-badge {
+	position: absolute;
+	top: -8px;
+	right: -12px;
+	background-color: #e74c3c;
+	color: white;
+	border-radius: 50%;
+	width: 22px;
+	height: 22px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+/* Main Sections */
+main {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 40px 20px;
+}
+
+/* Hero Section */
+.hero-section {
+	background-color: #ecf0f1;
+	border-radius: 12px;
+	padding: 60px 40px;
+	text-align: center;
+	margin-bottom: 60px;
+}
+
+.hero-section h1 {
+	font-size: 42px;
+	color: #27ae60;
+	margin-bottom: 15px;
+	font-weight: 700;
+}
+
+.hero-section p {
+	font-size: 18px;
+	color: #555;
+	margin-bottom: 30px;
+}
+
+.hero-btn {
+	background-color: #27ae60;
+	color: white;
+	padding: 12px 30px;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.hero-btn:hover {
+	background-color: #229954;
+}
+
+/* ===== Category Section ===== */
+.category-section {
+	margin-bottom: 60px;
+}
+
+.section-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 30px;
+}
+
+.section-header h2 {
+	font-size: 32px;
+	color: #2c3e50;
+	font-weight: 700;
+}
+
+.section-header .divider {
+	height: 4px;
+	width: 60px;
+	background-color: #27ae60;
+	border-radius: 2px;
+	margin-left: 10px;
+}
+
+.category-wrapper {
+	position: relative;
+	width: 100%;
+}
+
+.category-container {
+	overflow: hidden;
+	white-space: nowrap;
+	position: relative;
+	width: 100%;
+	padding: 20px 0;
+	cursor: grab;
+	height: 420px;
+	border-radius: 12px;
+}
+
+.category-container:active {
+	cursor: grabbing;
+}
+
+.category-slider {
+	display: inline-flex;
+	gap: 25px;
+	padding: 0 10px;
+	transition: transform 0.3s ease-out;
+	will-change: transform;
+}
+
+.slider-card {
+	display: inline-flex;
+	flex-direction: column;
+	width: 300px;
+	min-width: 300px;
+	height: 400px;
+	background-color: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	padding: 20px;
+	text-align: center;
+	transition: all 0.3s ease;
+	border: 2px solid #ecf0f1;
+	cursor: pointer;
+}
+
+.slider-card:hover {
+	transform: translateY(-8px) scale(1.03);
+	box-shadow: 0 8px 20px rgba(39, 174, 96, 0.2);
+	border-color: #27ae60;
+}
+
+.slider-card img {
+	width: 100%;
+	height: 180px;
+	object-fit: cover;
+	border-radius: 10px;
+	margin-bottom: 15px;
+	transition: transform 0.3s ease;
+}
+
+.slider-card:hover img {
+	transform: scale(1.05);
+}
+
+.slider-card h3 {
+	font-size: 18px;
+	color: #27ae60;
+	margin-bottom: 10px;
+	font-weight: 700;
+}
+
+.slider-card p {
+	font-size: 14px;
+	color: #7f8c8d;
+	line-height: 1.5em;
+	text-align: left;
+	white-space: normal;
+	flex: 1;
+}
+
+/* Product Section */
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 24px;
+}
+
+.product-card {
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	padding: 16px;
+	text-align: center;
+	border: 1px solid #ecf0f1;
+	transition: all 0.3s ease;
+	display: flex;
+	flex-direction: column;
+}
+
+.product-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+	border-color: #27ae60;
+}
+
+.product-card img {
+	width: 100%;
+	height: 160px;
+	object-fit: cover;
+	border-radius: 8px;
+	margin-bottom: 12px;
+}
+
+.product-card h3 {
+	font-size: 16px;
+	color: #2c3e50;
+	margin-bottom: 8px;
+	font-weight: 700;
+}
+
+.product-card p {
+	font-size: 14px;
+	color: #7f8c8d;
+	line-height: 1.4em;
+	text-align: left;
+	margin-bottom: 10px;
+	flex: 1;
+}
+
+.product-card .price {
+	color: #34495e;
+	font-weight: 600;
+	font-size: 16px;
+	margin-bottom: 12px;
+	text-align: center;
+}
+
+/* Fixed Quantity Design */
+.quantity-row {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin: 10px 0;
+	font-size: 14px;
+	color: #34495e;
+}
+
+.quantity-row label {
+	font-weight: 600;
+}
+
+.quantity-input {
+	width: 60px;
+	padding: 6px;
+	border-radius: 6px;
+	border: 1px solid #ccc;
+	text-align: center;
+	outline: none;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	font-size: 14px;
+}
+
+.quantity-input:focus {
+	border-color: #27ae60;
+	box-shadow: 0 0 4px rgba(39, 174, 96, 0.3);
+}
+
+/* Buttons */
+.btn-group {
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+}
+
+.add-cart {
+	background-color: #27ae60;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	padding: 10px 16px;
+	font-weight: 600;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.add-cart:hover {
+	background-color: #229954;
+}
+
+/* Toast Notification */
+.toast {
+	position: fixed;
+	top: 80px;
+	right: 20px;
+	padding: 16px 24px;
+	border-radius: 8px;
+	color: white;
+	font-weight: 600;
+	font-size: 15px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+	animation: slideIn 0.4s ease;
+	z-index: 1000;
+	max-width: 350px;
+}
+
+.toast.success {
+	background-color: #27ae60;
+}
+
+.toast.error {
+	background-color: #e74c3c;
+}
+
+@keyframes slideIn {
+	from { transform:translateX(400px); opacity: 0; }
+	to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+	from { transform:translateX(0); opacity: 1; }
+	to { transform: translateX(400px); opacity: 0; }
+}
+
+.toast.hide {
+	animation: slideOut 0.4s ease forwards;
+}
+
+@media (max-width: 768px) {
+	.product-grid {
+		grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	}
+	.slider-card {
+		width: 250px;
+		min-width: 250px;
+		height: 350px;
+	}
+}
+</style>
+</head>
+<body>
+	<nav>
+		<h1>🌿 EcoNova</h1>
+		<div>
+			<a th:href="@{/customerhome}">🏠 Home</a>
+			<a th:href="@{/about}">ℹ️ About</a>
+			<a th:href="@{/contact}">📞 Contact</a>
+			<a th:href="@{/cart/view}" class="cart-link">🛒 Cart
+				<span class="cart-badge" id="cartBadge">0</span>
+			</a>
+			<a th:href="@{/orders/my-orders}">📦 Orders</a>
+			<a th:href="@{/logout}">🚪 Logout</a>
+		</div>
+	</nav>
+
+	<main>
+		<!-- Hero Section -->
+		<section class="hero-section">
+			<h1>Welcome to EcoNova</h1>
+			<p>Discover sustainable and eco-friendly products for a better tomorrow</p>
+			<button class="hero-btn" onclick="window.location.href='/customerhome'">Shop Now</button>
+		</section>
+
+		<!-- Categories Section -->
+		<section class="category-section">
+			<div class="section-header">
+				<h2>🌿 Categories</h2>
+				<div class="divider"></div>
+			</div>
+			<div class="category-wrapper">
+				<div class="category-container" id="categoryContainer">
+					<div class="category-slider" id="categorySlider">
+						<div class="slider-card" th:each="cat : ${categories}"
+							th:onclick="'window.location.href=\'/customer/subcategories/'+${cat.id}+'\''">
+							<img th:src="@{${cat.imageUrl}}" alt="Category Image">
+							<h3 th:text="${cat.name}">Category Name</h3>
+							<p th:text="${cat.description}">Category description shown here.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Products Section -->
+		<section class="product-section">
+			<div class="product-grid">
+				<div class="product-card" th:each="product : ${products}">
+					<img th:src="@{${product.imageUrl}}" alt="Product Image">
+					<h3 th:text="${product.name}">Product Name</h3>
+					<p th:text="${product.description}">Product description...</p>
+					<p class="price">₹<span th:text="${#numbers.formatInteger(product.price,0)}"></span></p>
+
+					<!-- Quantity Row (Fixed Alignment) -->
+					<div class="quantity-row">
+						<label>Quantity:</label>
+						<input type="number" min="1" th:max="${product.quantity}" value="1"
+							class="quantity-input" th:id="'qty_'+${product.id}">
+					</div>
+
+					<div class="btn-group">
+						<button class="add-cart" th:data-product-id="${product.id}">Add to Cart</button>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<script>
+// Category slider interaction
+const container = document.getElementById('categoryContainer');
+const slider = document.getElementById('categorySlider');
+if (container && slider) {
+	container.addEventListener('mousemove', e => {
+		const rect = container.getBoundingClientRect();
+		const mouseX = e.clientX - rect.left;
+		const percentage = mouseX / rect.width;
+		const maxScroll = slider.scrollWidth - container.offsetWidth;
+		const translateX = -maxScroll * percentage;
+		slider.style.transform = `translateX(${translateX}px)`;
+	});
+}
+
+// Fetch cart count
+async function updateCartBadge() {
+	try {
+		const res = await fetch('/cart/count');
+		const data = await res.json();
+		document.getElementById('cartBadge').textContent = data.count || 0;
+	} catch (err) {
+		console.error('Error fetching cart count:', err);
+	}
+}
+
+// Add to cart
+async function addToCart(productId) {
+	const qtyInput = document.getElementById('qty_' + productId);
+	if (!qtyInput) return showToast('✗ Quantity input not found', 'error');
+	const qty = qtyInput.value;
+	if (!qty || qty < 1) return showToast('✗ Please enter a valid quantity', 'error');
+
+	try {
+		const res = await fetch('/cart/add', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: `productId=${productId}&quantity=${qty}`
+		});
+		if (res.ok) {
+			showToast('✓ Added to cart!', 'success');
+			updateCartBadge();
+			qtyInput.value = 1;
+		} else {
+			const errorText = await res.text();
+			showToast('✗ ' + (errorText || 'Failed to add'), 'error');
+		}
+	} catch (err) {
+		console.error('Error adding to cart:', err);
+		showToast('✗ Error adding to cart', 'error');
+	}
+}
+
+// Toast
+function showToast(msg, type = 'success') {
+	const toast = document.createElement('div');
+	toast.className = `toast ${type}`;
+	toast.textContent = msg;
+	document.body.appendChild(toast);
+	setTimeout(() => {
+		toast.classList.add('hide');
+		setTimeout(() => toast.remove(), 400);
+	}, 3000);
+}
+
+// Attach add-cart events
+document.querySelectorAll('.add-cart').forEach(btn => {
+	const pid = btn.getAttribute('data-product-id');
+	if (pid) btn.addEventListener('click', () => addToCart(pid));
+});
+
+window.addEventListener('load', updateCartBadge);
+</script>
+</body>
+</html>

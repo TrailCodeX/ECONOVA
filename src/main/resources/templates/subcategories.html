@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNova | Subcategories</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fafbfc;
+            color: #2c3e50;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #ffffff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        nav h1 {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        nav a {
+            color: #34495e;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        .subcategories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .subcategory-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .subcategory-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .subcategory-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .subcategory-card h3 {
+            font-size: 16px;
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subcategory-card p {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <h1>🌿 EcoNova</h1>
+    <div>
+        <a href="/">🏠 Home</a>
+        <a href="/about">ℹ️ About</a>
+        <a href="/contact">📞 Contact</a>
+        <a href="/login">🔑 Login</a>
+    </div>
+</nav>
+
+<main>
+    <h2 th:text="'Subcategories of ' + ${category.name}">Category Name</h2>
+    <div class="subcategories-grid">
+        <div class="subcategory-card" th:each="sub : ${subcategories}">
+            <img th:src="@{${sub.imageUrl}}" alt="Subcategory Image">
+            <h3 th:text="${sub.name}">Subcategory Name</h3>
+            <p th:text="${sub.description}">Subcategory description goes here</p>
+        </div>
+    </div>
+</main>
+</body>
+</html>

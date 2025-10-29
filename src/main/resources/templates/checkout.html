@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>EcoNova | Checkout</title>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+  padding: 30px;
+}
+
+h2 {
+  color: #27ae60;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.container {
+  background: #fff;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.address-list {
+  margin-bottom: 30px;
+}
+
+.address-card {
+  border: 1px solid #e8ecf1;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #fdfdfd;
+}
+
+button {
+  background-color: #27ae60;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  background-color: #229954;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+</style>
+</head>
+<body>
+
+<h2>Checkout - Add or Select Address</h2>
+
+<div class="container">
+  <div class="address-list" th:if="${#lists.isEmpty(addresses()) == false}">
+    <h3>Saved Addresses:</h3>
+    <div th:each="addr : ${addresses}" class="address-card">
+      <p><strong th:text="${addr.name}"></strong></p>
+      <p th:text="${addr.addressLine}"></p>
+      <p th:text="${addr.district + ' - ' + addr.pin}"></p>
+      <p>📞 <span th:text="${addr.phone}"></span></p>
+      <form th:action="@{/address/delete/{id}(id=${addr.id})}" method="post">
+        <button type="submit" style="background-color: #e74c3c;">Delete</button>
+      </form>
+    </div>
+  </div>
+
+  <h3>Add New Address</h3>
+  <form th:action="@{/address/save}" method="post" th:object="${address}">
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" required>
+    
+    <label>Building Name:</label>
+    <input type="text" th:field="*{buildingName}">
+
+    <label>Address Line:</label>
+    <textarea th:field="*{addressLine}" required></textarea>
+
+    <label>District:</label>
+    <input type="text" th:field="*{district}">
+
+    <label>PIN:</label>
+    <input type="text" th:field="*{pin}">
+
+    <label>Landmark:</label>
+    <input type="text" th:field="*{landmark}">
+
+    <label>Phone:</label>
+    <input type="text" th:field="*{phone}" required>
+
+    <button type="submit">Save Address</button>
+  </form>
+</div>
+
+</body>
+</html>

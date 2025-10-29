@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNova | My Orders</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fafbfc; color: #2c3e50; line-height: 1.6; }
+
+        nav { background-color: #ffffff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        nav h1 { font-size: 26px; color: #27ae60; font-weight: 700; }
+        nav div { display: flex; gap: 2rem; }
+        nav a { color: #34495e; text-decoration: none; font-weight: 500; font-size: 14px; }
+        nav a:hover { color: #27ae60; }
+
+        main { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+
+        h2 { font-size: 28px; color: #27ae60; margin-bottom: 20px; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 50px; }
+        th, td { padding: 12px 15px; text-align: center; border: 1px solid #ddd; }
+        th { background-color: #27ae60; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+
+        .btn { padding: 8px 16px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.3s ease; }
+        .btn-cancel { background-color: #e74c3c; color: white; }
+        .btn-cancel:hover { background-color: #c0392b; }
+        .btn-checkout { background-color: #27ae60; color: white; }
+        .btn-checkout:hover { background-color: #229954; }
+    </style>
+</head>
+<body>
+<nav>
+    <h1>🌿 EcoNova</h1>
+    <div>
+        <a href="/customerhome">🏠 Home</a>
+        <a href="/orders">🛒 My Orders</a>
+        <a href="/logout">🔑 Logout</a>
+    </div>
+</nav>
+
+<main>
+    <h2>My Orders</h2>
+
+    <h3>🛒 Pending Orders (Cart)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${pendingOrders}">
+                <td th:text="${order.product.name}">Product Name</td>
+                <td th:text="${order.orderQuantity}">1</td>
+                <td th:text="${order.product.price}">₹0</td>
+                <td th:text="${order.totalPrice}">₹0</td>
+                <td>
+                    <a th:href="@{'/buynow/' + ${order.product.id} + '?quantity=' + ${order.orderQuantity}}" class="btn btn-checkout">Buy Now</a>
+                    <a th:href="@{'/cancelorder/' + ${order.id}}" class="btn btn-cancel">Cancel</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>✅ Confirmed / Completed Orders</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${confirmedOrders}">
+                <td th:text="${order.product.name}">Product Name</td>
+                <td th:text="${order.orderQuantity}">1</td>
+                <td th:text="${order.product.price}">₹0</td>
+                <td th:text="${order.totalPrice}">₹0</td>
+                <td th:text="${order.status}">Confirmed</td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

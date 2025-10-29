@@ -1,0 +1,106 @@
+<!-- src/main/resources/templates/fragments/admin_sidebar.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Sidebar Fragment -->
+    <div th:fragment="sidebar" class="sidebar">
+        <h2>🛠 Admin Panel</h2>
+        <a th:href="@{/admin/dashboard}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/dashboard')} ? 'active' : ''">🏠 Dashboard</a>
+        <a th:href="@{/admin/product/manage}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/product/manage')} ? 'active' : ''">📦 Manage Products</a>
+        <a th:href="@{/admin/product/add}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/product/add')} ? 'active' : ''">🛒 Add Product</a>
+        <a th:href="@{/admin/category/manage}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/category/manage')} ? 'active' : ''">📂 Manage Category</a>
+        <a th:href="@{/admin/category/add}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/category/add')} ? 'active' : ''">➕ Add Category</a>
+        <a th:href="@{/admin/subcategory/manage}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/subcategory/manage')} ? 'active' : ''">📁 Manage Subcategory</a>
+        <a th:href="@{/admin/subcategory/add}" th:classappend="${#strings.contains(#httpServletRequest.requestURI, '/admin/subcategory/add')} ? 'active' : ''">➕ Add Subcategory</a>
+        <a th:href="@{/logout}" style="margin-top: auto; background-color: #dc3545;">🚪 Logout</a>
+    </div>
+
+    <!-- Sidebar Styles Fragment -->
+    <style th:fragment="sidebar-styles">
+        /* ===== Sidebar Container ===== */
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #0a2540;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 10px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            color: #00bcd4;
+            margin-bottom: 25px;
+        }
+
+        /* ===== Sidebar Links ===== */
+        .sidebar a {
+            display: block;
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 4px 0;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover {
+            background-color: #00bcd4;
+            color: #0a2540;
+            transform: translateX(5px);
+        }
+
+        .sidebar a.active {
+            background-color: #00bcd4;
+            color: #0a2540;
+            font-weight: 600;
+        }
+
+        /* ===== Main Content Area ===== */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+            background-color: #f9fafc;
+            min-height: 100vh;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                position: relative;
+                overflow-x: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-top: 70px;
+            }
+
+            .sidebar a {
+                margin: 0 5px;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+            .sidebar h2 {
+                display: none;
+            }
+        }
+    </style>
+</body>
+</html>

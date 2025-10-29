@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control"
+	content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Edit Category</title>
+<style>
+body {
+	font-family: 'Segoe UI', sans-serif;
+	background-color: #f0f8f5;
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	text-align: center;
+	color: #007bff;
+	margin-top: 2rem;
+}
+
+form {
+	background-color: white;
+	max-width: 500px;
+	margin: 2rem auto;
+	padding: 2rem;
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+	display: block;
+	margin-top: 1rem;
+	font-weight: bold;
+	color: #333;
+}
+
+input[type="text"], textarea, input[type="file"] {
+	width: 100%;
+	padding: 0.6rem;
+	margin-top: 0.4rem;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	font-size: 1rem;
+	box-sizing: border-box;
+}
+
+textarea {
+	min-height: 100px;
+	resize: vertical;
+}
+
+button {
+	display: block;
+	width: 100%;
+	padding: 0.8rem;
+	margin-top: 1.5rem;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 6px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+
+a.back {
+	display: block;
+	text-align: center;
+	margin-top: 1rem;
+	color: #007bff;
+	text-decoration: none;
+}
+
+a.back:hover {
+	text-decoration: underline;
+}
+
+img.preview {
+	display: block;
+	margin-top: 1rem;
+	width: 100%;
+	max-width: 400px;
+	height: auto;
+	border-radius: 8px;
+}
+</style>
+</head>
+<body>
+
+	<h2>Edit Category</h2>
+
+	<form th:action="@{/admin/category/update}" method="post"
+		enctype="multipart/form-data">
+		<input type="hidden" th:name="id" th:value="${category.id}" /> <label>Category
+			Name:</label> <input type="text" th:name="name" th:value="${category.name}"
+			required> <label>Description:</label>
+		<textarea th:name="description" th:text="${category.description}"></textarea>
+
+		<label>Current Image:</label> <img
+			th:src="${category.imageUrl + '?v=' + #dates.createNow().time}"
+			alt="Current Image" class="preview" loading="eager"> <label>Upload
+			New Image (optional):</label> <input type="file" name="image"
+			accept="image/*">
+
+		<button type="submit">Update Category</button>
+		<a href="/admin/category/manage" class="back">Back to Manage
+			Categories</a>
+	</form>
+
+</body>
+</html>

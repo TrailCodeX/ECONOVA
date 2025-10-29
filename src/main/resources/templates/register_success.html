@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Successful</title>
+    <script type="text/javascript">
+        /* Show alert and redirect */
+        window.onload = function() {
+            alert(/*[[${successMessage}]]*/ 'Registration successful!');
+            window.location.href = '/customerhome';
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Payment Confirmation</title>
+<style>
+body { font-family: 'Segoe UI', sans-serif; background: #f4f6f9; text-align: center; padding-top: 100px; }
+h2 { color: #27ae60; margin-bottom: 20px; }
+a { text-decoration: none; color: #3498db; font-size: 16px; }
+</style>
+</head>
+<body>
+  <h2>✅ Payment Method Selected Successfully!</h2>
+  <p>Your order will be processed soon.</p>
+  <a th:href="@{/customerhome}">← Back to Home</a>
+</body>
+</html>

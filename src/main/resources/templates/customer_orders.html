@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders - EcoNova</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f5f7fa;
+	color: #2c3e50;
+	line-height: 1.6;
+}
+
+nav {
+	background-color: #ffffff;
+	padding: 1rem 2rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);  
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+nav h1 {
+	font-size: 26px;
+	color: #27ae60;
+	font-weight: 700;
+}
+
+nav div {
+	display: flex;
+	gap: 2rem;
+	align-items: center;
+}
+
+nav a {
+	color: #34495e;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+nav a:hover {
+	color: #27ae60;
+}
+
+nav a.active {
+	color: #27ae60;
+	font-weight: 600;
+}
+
+main {
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 40px 20px;
+}
+
+.hero-section {
+	background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+	border-radius: 12px;
+	padding: 50px 40px;
+	text-align: center;
+	margin-bottom: 40px;
+	color: white;
+}
+
+.hero-section h1 {
+	font-size: 38px;
+	margin-bottom: 10px;
+	font-weight: 700;
+}
+
+.hero-section p {
+	font-size: 16px;
+	opacity: 0.95;
+}
+
+.orders-section {
+	background: white;
+	border-radius: 12px;
+	padding: 30px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 25px;
+	padding-bottom: 15px;
+	border-bottom: 2px solid #ecf0f1;
+}
+
+.section-header h2 {
+	font-size: 24px;
+	color: #2c3e50;
+	font-weight: 600;
+}
+
+.total-orders {
+	background: #ecf0f1;
+	padding: 8px 16px;
+	border-radius: 20px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #27ae60;
+}
+
+.orders-table-container {
+	overflow-x: auto;
+}
+
+.orders-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.orders-table thead {
+	background: #f8f9fa;
+}
+
+.orders-table th {
+	padding: 16px 12px;
+	text-align: left;
+	font-size: 13px;
+	font-weight: 700;
+	color: #7f8c8d;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	border-bottom: 2px solid #ecf0f1;
+}
+
+.orders-table tbody tr {
+	border-bottom: 1px solid #ecf0f1;
+	transition: all 0.2s ease;
+}
+
+.orders-table tbody tr:hover {
+	background-color: #f8f9fa;
+}
+
+.orders-table td {
+	padding: 18px 12px;
+	font-size: 14px;
+	color: #2c3e50;
+	vertical-align: middle;
+}
+
+.order-id-cell {
+	font-weight: 700;
+	color: #27ae60;
+	text-align: center;
+	font-size: 16px;
+}
+
+.amount-cell {
+	font-weight: 700;
+	color: #27ae60;
+	font-size: 18px;
+}
+
+.date-cell {
+	color: #7f8c8d;
+	font-size: 13px;
+}
+
+.status-badge {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 16px;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.delivery-pending {
+	background: #fff3cd;
+	color: #856404;
+}
+
+.delivery-delivered {
+	background: #d4edda;
+	color: #155724;
+}
+
+.delivery-shipped {
+	background: #d1ecf1;
+	color: #0c5460;
+}
+
+.payment-method {
+	background: #e7f3ff;
+	color: #0066cc;
+	padding: 4px 10px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.address-cell {
+	max-width: 250px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: #555;
+}
+
+.products-cell {
+	padding: 15px 12px !important;
+}
+
+.product-list {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.product-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	border: 1px solid #ecf0f1;
+}
+
+.product-image {
+	width: 60px;
+	height: 60px;
+	border-radius: 8px;
+	object-fit: cover;
+	border: 2px solid #e0e0e0;
+}
+
+.product-info {
+	flex: 1;
+}
+
+.product-name {
+	font-weight: 600;
+	font-size: 14px;
+	color: #2c3e50;
+	margin-bottom: 4px;
+}
+
+.product-quantity {
+	font-size: 12px;
+	color: #7f8c8d;
+}
+
+.empty-state {
+	text-align: center;
+	padding: 80px 20px;
+	background: white;
+	border-radius: 12px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.empty-state .icon {
+	font-size: 72px;
+	margin-bottom: 20px;
+}
+
+.empty-state h2 {
+	font-size: 28px;
+	color: #2c3e50;
+	margin-bottom: 12px;
+	font-weight: 600;
+}
+
+.empty-state p {
+	font-size: 16px;
+	color: #7f8c8d;
+	margin-bottom: 24px;
+}
+
+.hero-btn {
+	background-color: #27ae60;
+	color: white;
+	padding: 12px 30px;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+}
+
+.hero-btn:hover {
+	background-color: #229954;
+}
+
+@media (max-width: 768px) {
+	nav div {
+		gap: 1rem;
+	}
+	.hero-section h1 {
+		font-size: 28px;
+	}
+	.orders-section {
+		padding: 20px 15px;
+	}
+	.orders-table thead {
+		display: none;
+	}
+	.orders-table, .orders-table tbody, .orders-table tr, .orders-table td {
+		display: block;
+	}
+	.orders-table tbody tr {
+		margin-bottom: 20px;
+		border: 1px solid #ecf0f1;
+		border-radius: 8px;
+		padding: 15px;
+	}
+	.orders-table td {
+		padding: 10px 0;
+		border-bottom: 1px solid #f0f0f0;
+	}
+	.orders-table td::before {
+		content: attr(data-label);
+		font-weight: 700;
+		color: #7f8c8d;
+		text-transform: uppercase;
+		font-size: 11px;
+		display: block;
+		margin-bottom: 5px;
+	}
+	.product-item {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+</style>
+</head>
+<body>
+	<nav>
+		<h1>🌿 EcoNova</h1>
+		<div>
+			<a th:href="@{/customerhome}">🏠 Home</a>
+			<a th:href="@{/about}">ℹ️ About</a>
+			<a th:href="@{/contact}">📞 Contact</a>
+			<a th:href="@{/orders/my-orders}" class="active">📦 Orders</a>
+			<a th:href="@{/cart/view}">🛒 Cart</a>
+			<a th:href="@{/logout}">🚪 Logout</a>
+		</div>
+	</nav>
+
+	<main>
+		<section class="hero-section">
+			<h1>📦 My Orders</h1>
+			<p>Track and manage all your orders in one place</p>
+		</section>
+
+		<section class="orders-section" th:if="${orders != null and !orders.isEmpty()}">
+			<div class="section-header">
+				<h2>Order History</h2>
+				<span class="total-orders" th:text="${orders.size()} + ' Orders'">7 Orders</span>
+			</div>
+
+			<div class="orders-table-container">
+				<table class="orders-table">
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>Products</th>
+							<th>Date</th>
+							<th>Amount</th>
+							<th>Payment Method</th>
+							<th>Delivery Status</th>
+							<th>Delivery Address</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="order, stat : ${orders}">
+							<td data-label="No." class="order-id-cell">
+								<span th:text="${stat.index + 1}">1</span>
+							</td>
+							
+							<td data-label="Products" class="products-cell">
+								<div class="product-list" th:if="${order.orderItems != null and !order.orderItems.isEmpty()}">
+									<div th:each="item : ${order.orderItems}" class="product-item">
+										<img th:if="${item.product != null and item.product.imageUrl != null}" 
+										     th:src="${item.product.imageUrl}" 
+										     alt="Product Image"
+										     class="product-image"
+										     onerror="this.src='https://via.placeholder.com/60?text=No+Image'">
+										<img th:unless="${item.product != null and item.product.imageUrl != null}"
+										     src="https://via.placeholder.com/60?text=No+Image"
+										     alt="No Image"
+										     class="product-image">
+										<div class="product-info">
+											<div class="product-name">
+												<span th:if="${item.product != null and item.product.name != null}" 
+												      th:text="${item.product.name}">Product Name</span>
+												<span th:unless="${item.product != null and item.product.name != null}"
+												      th:text="${item.productName != null ? item.productName : 'Unknown Product'}">Product Name</span>
+											</div>
+											<div class="product-quantity">
+												Qty: <strong th:text="${item.quantity}">1</strong>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div th:unless="${order.orderItems != null and !order.orderItems.isEmpty()}">
+									<em style="color: #999;">No products</em>
+								</div>
+							</td>
+							
+							<td data-label="Date" class="date-cell">
+								<span th:if="${order.createdAt != null}"
+								      th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy')}">18 Oct 2025</span>
+								<span th:unless="${order.createdAt != null}">N/A</span><br>
+								<small th:if="${order.createdAt != null}"
+								       th:text="${#temporals.format(order.createdAt, 'hh:mm a')}">12:37 PM</small>
+							</td>
+							
+							<td data-label="Amount" class="amount-cell">
+								₹<span th:text="${order.amount != null ? #numbers.formatInteger(order.amount, 0) : '0'}">500</span>
+							</td>
+							
+							<td data-label="Payment Method">
+								<span class="payment-method"
+								      th:text="${order.paymentMethod != null ? order.paymentMethod : 'COD'}">COD</span>
+							</td>
+							
+							<td data-label="Delivery Status">
+								<span class="status-badge"
+								      th:classappend="${order.deliveryStatus == 'Delivered' ? 'delivery-delivered' : (order.deliveryStatus == 'Shipped' ? 'delivery-shipped' : 'delivery-pending')}"
+								      th:text="${order.deliveryStatus != null ? order.deliveryStatus : 'Pending'}">
+								      Pending
+								</span>
+							</td>
+							
+							<td data-label="Address" class="address-cell">
+								<div th:if="${order.address != null}">
+									<strong th:if="${order.address.fullName != null}"
+									        th:text="${order.address.fullName}"></strong>
+									<br th:if="${order.address.fullName != null}">
+									<span th:if="${order.address.buildingName != null}"
+									      th:text="${order.address.buildingName}"></span>
+									<span th:if="${order.address.buildingName != null}">, </span>
+									<span th:if="${order.address.street != null}"
+									      th:text="${order.address.street}"></span>
+									<br th:if="${order.address.street != null or order.address.buildingName != null}">
+									<span th:if="${order.address.landmark != null}"
+									      th:text="'Near ' + ${order.address.landmark}"></span>
+									<br th:if="${order.address.landmark != null}">
+									<span th:if="${order.address.city != null}"
+									      th:text="${order.address.city}"></span>
+									<span th:if="${order.address.city != null}">, </span>
+									<span th:if="${order.address.state != null}"
+									      th:text="${order.address.state}"></span>
+									<span th:if="${order.address.pincode != null}"
+									      th:text="' - ' + ${order.address.pincode}"></span>
+									<br th:if="${order.address.phone != null}">
+									<small th:if="${order.address.phone != null}"
+									       th:text="'📞 ' + ${order.address.phone}"></small>
+								</div>
+								<div th:unless="${order.address != null}">
+									<em style="color: #999;">No address</em>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<div class="empty-state" th:if="${orders == null or orders.isEmpty()}">
+			<div class="icon">📦</div>
+			<h2>No Orders Yet</h2>
+			<p>You haven't placed any orders. Start shopping to see your orders here!</p>
+			<a href="/customerhome" class="hero-btn">Start Shopping</a>
+		</div>
+	</main>
+</body>
+</html>

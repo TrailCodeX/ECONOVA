@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNova</title>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0; top: 0;
+            width: 260px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e9ecef;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header { padding: 24px 20px; border-bottom: 1px solid #e9ecef; }
+        .sidebar-header h2 { font-size: 20px; font-weight: 600; color: #212529; }
+
+        .sidebar-nav { padding: 16px 0; }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #495057;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .sidebar a:hover { background: #f8f9fa; color: #667eea; }
+
+        .sidebar-footer {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 16px 20px;
+            border-top: 1px solid #e9ecef;
+            background: #ffffff;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .logout-btn:hover { background: #bb2d3b; }
+
+        /* MAIN CONTENT */
+        .main-content { margin-left: 260px; min-height: 100vh; }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 0.5rem; }
+        .dashboard-header p { font-size: 16px; opacity: 0.95; }
+
+        .dashboard-content { padding: 2.5rem; }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+        .stat-card.products::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+        .stat-card.categories::before { background: linear-gradient(90deg, #f093fb, #f5576c); }
+        .stat-card.users::before { background: linear-gradient(90deg, #4facfe, #00f2fe); }
+        .stat-card.customers::before { background: linear-gradient(90deg, #43e97b, #38f9d7); }
+        .stat-card.admins::before { background: linear-gradient(90deg, #ff7e5f, #feb47b); }
+
+        .stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .stat-label { font-size: 14px; color: #718096; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 36px; font-weight: 700; color: #2d3748; margin-bottom: 0.5rem; }
+        .stat-description { font-size: 13px; color: #a0aec0; }
+        .stat-icon { font-size: 42px; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #e9ecef; }
+            .main-content { margin-left: 0; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .stat-value { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🌿 EcoNova Admin</h2>
+        </div>
+        <div class="sidebar-nav">
+            <a href="/admin/product/manage"><span class="icon"></span>All Products</a>
+            <a href="/admin/product/add"><span class="icon"></span>Add Product</a>
+            <a href="/admin/category/manage"><span class="icon"></span>All Categories</a>
+            <a href="/admin/category/add"><span class="icon"></span>Add Category</a>
+            <a href="/admin/subcategory/manage"><span class="icon"></span>All Subcategories</a>
+            <a href="/admin/subcategory/add"><span class="icon"></span>Add Subcategory</a>
+            <!-- ✅ Corrected Orders link -->
+            <a href="/admin/all"><span class="icon"></span>Orders</a>
+        </div>
+        <div class="sidebar-footer">
+            <a href="/logout" class="logout-btn"><span>🚪</span>Logout</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h1>👋 Welcome Back, Admin!</h1>
+            <p>Here's what's happening with your eco-friendly store today</p>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="stats-grid">
+                <!-- Total Products -->
+                <div class="stat-card products">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Total Products</div>
+                            <div class="stat-value" th:text="${totalProducts}"></div>
+                            <div class="stat-description">Active products in store</div>
+                        </div>
+                        <div class="stat-icon">📦</div>
+                    </div>
+                </div>
+
+                <!-- Total Categories -->
+                <div class="stat-card categories">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Total Categories</div>
+                            <div class="stat-value" th:text="${totalCategories}"></div>
+                            <div class="stat-description">Product categories</div>
+                        </div>
+                        <div class="stat-icon">📂</div>
+                    </div>
+                </div>
+
+                <!-- Total Users -->
+                <div class="stat-card users">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Total Users</div>
+                            <div class="stat-value" th:text="${totalUsers}"></div>
+                            <div class="stat-description">All registered users</div>
+                        </div>
+                        <div class="stat-icon">👥</div>
+                    </div>
+                </div>
+
+                <!-- Total Customers -->
+                <div class="stat-card customers">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Customers</div>
+                            <div class="stat-value" th:text="${totalCustomers}"></div>
+                            <div class="stat-description">Customers only</div>
+                        </div>
+                        <div class="stat-icon">🧑‍💼</div>
+                    </div>
+                </div>
+
+                <!-- Total Admins 
+                <div class="stat-card admins">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-label">Admins</div>
+                            <div class="stat-value" th:text="${totalAdmins}"></div>
+                            <div class="stat-description">Admin accounts</div>
+                        </div>
+                        <div class="stat-icon">🛡️</div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

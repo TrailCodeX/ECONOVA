@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>EcoNova Registration</title>
+<style>
+body {
+	background-color: #f0f4f8;
+	font-family: Arial, sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding: 20px;
+}
+
+.register-container {
+	background: white;
+	padding: 40px;
+	border-radius: 15px;
+	box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 400px;
+}
+
+h2 {
+	text-align: center;
+	color: #007f73;
+	margin-bottom: 30px;
+}
+
+.form-group {
+	margin-bottom: 15px;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+	color: #333;
+	font-weight: 500;
+}
+
+input {
+	width: 100%;
+	padding: 10px;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+	font-size: 14px;
+	box-sizing: border-box;
+}
+
+input:focus {
+	outline: none;
+	border-color: #007f73;
+	box-shadow: 0 0 5px rgba(0, 127, 115, 0.3);
+}
+
+button {
+	width: 100%;
+	padding: 10px;
+	background-color: #007f73;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+button:hover {
+	background-color: #00695c;
+}
+
+.error {
+	color: red;
+	text-align: center;
+	margin-bottom: 15px;
+	font-size: 14px;
+}
+
+.success {
+	color: green;
+	text-align: center;
+	margin-bottom: 15px;
+	font-size: 14px;
+	padding: 10px;
+	background-color: #e8f5e9;
+	border-radius: 5px;
+}
+
+.login-link {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.login-link a {
+	color: #007f73;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.login-link a:hover {
+	text-decoration: underline;
+}
+
+.success-container {
+	text-align: center;
+}
+
+.success-container a {
+	display: inline-block;
+	margin-top: 20px;
+	padding: 10px 20px;
+	background-color: #007f73;
+	color: white;
+	text-decoration: none;
+	border-radius: 8px;
+	font-weight: bold;
+}
+
+.success-container a:hover {
+	background-color: #00695c;
+}
+</style>
+</head>
+<body>
+	<div class="register-container">
+		<h2>EcoNova Registration</h2>
+
+		<!-- Error Message -->
+		<p class="error" th:text="${error}" th:if="${error}"></p>
+
+		<!-- Registration Form -->
+		<form th:action="@{/register}" method="post"
+			th:if="${success == null}">
+			<div class="form-group">
+				<label for="firstName">First Name *</label> <input type="text"
+					id="firstName" name="firstName" placeholder="Enter First Name"
+					required>
+			</div>
+			<div class="form-group">
+				<label for="lastName">Last Name *</label> <input type="text"
+					id="lastName" name="lastName" placeholder="Enter Last Name"
+					required>
+			</div>
+			<div class="form-group">
+				<label for="email">Email *</label> <input type="email" id="email"
+					name="email" placeholder="Enter Email" required>
+			</div>
+			<div class="form-group">
+				<label for="password">Password *</label> <input type="password"
+					id="password" name="password" placeholder="Enter Password" required
+					minlength="6">
+			</div>
+			<div class="form-group">
+				<label for="confirmPassword">Confirm Password *</label> <input
+					type="password" id="confirmPassword" name="confirmPassword"
+					placeholder="Confirm Password" required minlength="6">
+			</div>
+			<button type="submit">Register</button>
+		</form>
+
+		<!-- Success Message with Redirect -->
+		<div class="success-container" th:if="${success != null}">
+			<p class="success" th:text="${success}"></p>
+			<p>Redirecting to login page...</p>
+			<a th:href="@{/login}">Click here if not redirected automatically</a>
+			<script type="text/javascript">
+				setTimeout(function() {
+					window.location.href = '/login';
+				}, 3000);
+			</script>
+		</div>
+
+		<!-- Login Link -->
+		<div class="login-link" th:if="${success == null}">
+			<p>
+				Already have an account? <a th:href="@{/login}">Login here</a>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

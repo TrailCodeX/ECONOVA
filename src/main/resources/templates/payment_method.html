@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNova | Select Payment Method</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .main-container { background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); max-width: 1000px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+        .payment-section { padding: 40px; border-right: 2px solid #ecf0f1; display: flex; flex-direction: column; justify-content: space-between; }
+        .payment-section h2 { color: #2c3e50; font-size: 24px; margin-bottom: 30px; font-weight: 700; }
+        .payment-methods { display: flex; flex-direction: column; gap: 15px; flex: 1; }
+        .payment-option { border: 2px solid #ecf0f1; border-radius: 10px; padding: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: flex-start; gap: 15px; }
+        .payment-option:hover { border-color: #27ae60; box-shadow: 0 4px 12px rgba(39, 174, 96, 0.15); background-color: #f9fef8; }
+        .payment-option input[type="radio"] { width: 20px; height: 20px; cursor: pointer; margin-top: 2px; flex-shrink: 0; }
+        .payment-option.selected { border-color: #27ae60; background-color: #f0f7ff; }
+        .payment-info { flex: 1; }
+        .payment-title { font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 6px; }
+        .payment-description { font-size: 13px; color: #7f8c8d; line-height: 1.5; }
+        .summary-section { padding: 40px; background: linear-gradient(135deg, #f8fbf9 0%, #f0f7ff 100%); display: flex; flex-direction: column; justify-content: space-between; }
+        .summary-section h2 { color: #2c3e50; font-size: 24px; margin-bottom: 30px; font-weight: 700; }
+        .order-summary { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ecf0f1; font-size: 14px; }
+        .summary-item.total { font-weight: 700; font-size: 18px; color: #27ae60; border-top: 2px solid #ecf0f1; padding: 15px 0 0 0; margin: 10px 0 0 0; border-bottom: none; }
+        .button-section { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .btn { padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary { background: #27ae60; color: white; }
+        .btn-primary:hover { background: #229954; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3); }
+        .btn-back { background: #ecf0f1; color: #2c3e50; }
+        .btn-back:hover { background: #bdc3c7; }
+        @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } .payment-section { border-right: none; border-bottom: 2px solid #ecf0f1; } }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="payment-section">
+            <div>
+                <h2>Choose Payment Method</h2>
+                <form id="paymentForm">
+                    <div class="payment-methods">
+                        <label class="payment-option selected">
+                            <input type="radio" name="paymentMethod" value="COD" checked>
+                            <div class="payment-info">
+                                <div class="payment-title">Cash on Delivery (COD)</div>
+                                <div class="payment-description">Pay when your order arrives at your doorstep</div>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="RAZORPAY">
+                            <div class="payment-info">
+                                <div class="payment-title">Online Payment (Razorpay)</div>
+                                <div class="payment-description">Pay with Card, UPI, or Wallet instantly</div>
+                            </div>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="button-section">
+                <button type="button" class="btn btn-back" onclick="goBack()">Back to Cart</button>
+                <button type="button" class="btn btn-primary" onclick="proceedPayment()">Continue</button>
+            </div>
+        </div>
+        <div class="summary-section">
+            <div>
+                <h2>Order Summary</h2>
+                <div class="order-summary">
+                    <div class="summary-item">
+                        <span>Subtotal</span>
+                        <span>₹<span th:text="${#numbers.formatInteger(amount - 40, 0)}">0</span></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shipping</span>
+                        <span>₹40</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total Amount</span>
+                        <span th:text="${#numbers.formatInteger(subtotal != null ? subtotal : (amount - 40), 0)}">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const amount = [[${amount}]];
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+        function goBack() { window.history.back(); }
+        function proceedPayment() {
+            const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+            if (method === 'COD') {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/payment/cod/place-order';
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'amount';
+                input.value = amount;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                window.location.href = '/payment/razorpay/page?amount=' + amount;
+            }
+        }
+    </script>
+</body>
+</html>

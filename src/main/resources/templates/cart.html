@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>EcoNova | Cart</title>
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f5f7fa;
+	min-height: 100vh;
+}
+
+main {
+	padding: 40px 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.progress-bar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 30px;
+}
+
+.progress-step {
+	display: flex;
+	align-items: center;
+	font-size: 16px;
+	font-weight: 600;
+	color: #27ae60;
+}
+
+.progress-step.inactive {
+	color: #bdc3c7;
+}
+
+.progress-connector {
+	width: 60px;
+	height: 2px;
+	background-color: #bdc3c7;
+	margin: 0 15px;
+}
+
+.progress-connector.active {
+	background-color: #27ae60;
+}
+
+h1 {
+	color: #27ae60;
+	margin-bottom: 25px;
+	font-size: 32px;
+	font-weight: 700;
+	text-align: center;
+}
+
+.cart-container {
+	background: white;
+	border-radius: 12px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	padding: 20px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border-bottom: 1px solid #e8ecf1;
+	padding: 12px 10px;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 14px;
+}
+
+th {
+	background-color: #27ae60;
+	color: white;
+	font-weight: 600;
+}
+
+tr:hover {
+	background-color: #f8fbf9;
+}
+
+img {
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+input[type="number"] {
+	width: 60px;
+	padding: 6px;
+	border-radius: 6px;
+	border: 2px solid #e8ecf1;
+	text-align: center;
+	font-size: 14px;
+}
+
+button, a {
+	text-decoration: none;
+	padding: 8px 18px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: 500;
+	font-size: 14px;
+	transition: all 0.3s ease;
+	border: none;
+}
+
+.remove {
+	background-color: #e74c3c;
+	color: white;
+}
+
+.remove:hover {
+	background-color: #c0392b;
+}
+
+.update-btn {
+	background-color: #27ae60;
+	color: white;
+}
+
+.update-btn:hover {
+	background-color: #229954;
+}
+
+.order-summary {
+	background: #ffffff;
+	border-radius: 12px;
+	padding: 25px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	max-width: 400px;
+	margin: 30px auto 0 auto;
+	text-align: left;
+}
+
+.summary-title {
+	font-size: 20px;
+	font-weight: 700;
+	color: #2c3e50;
+	margin-bottom: 15px;
+	border-bottom: 2px solid #e8ecf1;
+	padding-bottom: 10px;
+}
+
+.summary-row {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 12px;
+	font-size: 14px;
+	color: #2c3e50;
+}
+
+.summary-row.total {
+	font-weight: 700;
+	font-size: 16px;
+	border-top: 1px solid #e8ecf1;
+	padding-top: 12px;
+	margin-top: 12px;
+	color: #27ae60;
+}
+
+.checkout-btn {
+	width: 100%;
+	background-color: #27ae60;
+	color: white;
+	border: none;
+	padding: 12px;
+	border-radius: 6px;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	margin-top: 15px;
+	transition: all 0.3s ease;
+	text-align: center;
+	display: block;
+}
+
+.checkout-btn:hover {
+	background-color: #229954;
+}
+
+.continue {
+	background-color: #3498db;
+	color: white;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.continue:hover {
+	background-color: #2980b9;
+}
+
+.address-box {
+	background: #f4f6f9;
+	padding: 15px;
+	border-radius: 8px;
+	margin: 20px 0;
+}
+
+/* Empty cart style */
+.empty-cart {
+	text-align: center;
+	padding: 60px 20px;
+	background-color: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	margin-top: 40px;
+}
+
+.empty-cart h2 {
+	color: #2c3e50;
+	font-size: 24px;
+	font-weight: 700;
+	margin-bottom: 15px;
+}
+
+.empty-cart p {
+	color: #7f8c8d;
+	font-size: 15px;
+	margin-bottom: 25px;
+}
+
+.empty-cart a {
+	background-color: #27ae60;
+	color: white;
+	padding: 10px 24px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: background 0.3s;
+}
+
+.empty-cart a:hover {
+	background-color: #229954;
+}
+
+@media ( max-width : 768px) {
+	table, th, td {
+		font-size: 12px;
+		padding: 8px;
+	}
+	img {
+		width: 60px;
+		height: 60px;
+	}
+	.order-summary {
+		max-width: 100%;
+		padding: 15px;
+	}
+}
+</style>
+</head>
+<body>
+	<!-- Navbar -->
+	<div th:replace="~{fragments/header :: navbar}"></div>
+
+	<main>
+		<div class="progress-bar">
+			<div class="progress-step active">1. Cart</div>
+			<div class="progress-connector active"></div>
+			<div class="progress-step inactive">2. Checkout</div>
+			<div class="progress-connector inactive"></div>
+			<div class="progress-step inactive">3. Payment</div>
+		</div>
+
+		<h1>🛒 Your Cart</h1>
+
+		<!-- ✅ Show cart if not empty -->
+		<div th:if="${cartItems != null and #lists.size(cartItems) > 0}">
+			<form th:action="@{/cart/update}" method="post" id="cartForm">
+				<table>
+					<thead>
+						<tr>
+							<th>S.No</th>
+							<th>Product Image</th>
+							<th>Product Name</th>
+							<th>Quantity</th>
+							<th>Unit Price</th>
+							<th>Total Price</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="item, stat : ${cartItems}">
+							<td th:text="${stat.index + 1}">1</td>
+							<td><img th:src="${item.product.imageUrl}"
+								alt="Product Image"></td>
+							<td th:text="${item.product.name}">Product Name</td>
+							<td><input type="number" class="qty-input"
+								th:value="${item.quantity}" min="1" step="1"
+								th:data-price="${item.product.price}"> <input
+								type="hidden" name="quantities" class="qty-hidden"
+								th:value="${item.quantity}"> <input type="hidden"
+								name="cartIds" th:value="${item.id}"></td>
+							<td>₹<span
+								th:text="${#numbers.formatInteger(item.product.price,0)}">0</span></td>
+							<td><strong>₹<span class="total-price"
+									th:text="${#numbers.formatInteger(item.product.price * item.quantity,0)}">0</span></strong></td>
+							<td>
+								<button type="submit"
+									th:formaction="@{/cart/remove(cartId=${item.id})}"
+									class="remove">Remove</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div style="text-align: right; margin-top: 15px;">
+					<button type="submit" class="update-btn">✓ Update
+						Quantities</button>
+				</div>
+			</form>
+
+			<!-- Address Section -->
+			<div class="address-box" th:if="${selectedAddress != null}">
+				<strong>Delivery Address:</strong><br> <span
+					th:text="${selectedAddress.name}"></span><br> <span
+					th:text="${selectedAddress.addressLine} + ', ' + ${selectedAddress.buildingName} + ', ' + ${selectedAddress.district} + ' - ' + ${selectedAddress.pin}"></span><br>
+				<span th:text="'(' + ${selectedAddress.phone} + ')'"></span><br>
+				<a th:href="@{/address/form}">Change / Add Address</a>
+			</div>
+			<div class="address-box" th:if="${selectedAddress == null}">
+				<p>
+					No address selected. <a th:href="@{/address/form}">Add Address</a>
+				</p>
+			</div>
+
+			<!-- Order Summary -->
+			<div class="order-summary">
+				<div class="summary-title">Order Summary</div>
+				<div class="summary-row">
+					<span>Sub Total</span> <span>₹<span id="subtotal">0</span></span>
+				</div>
+				<div class="summary-row">
+					<span>Shipping</span> <span>₹40</span>
+				</div>
+				<div class="summary-row total">
+					<span>Total</span> <span>₹<span id="total">0</span></span>
+				</div>
+				<a th:href="@{/address/form(amount=${total}, subtotal=${subtotal})}"
+					class="checkout-btn">💳 Proceed to Checkout</a>
+			</div>
+		</div>
+
+		<!-- ❌ Empty Cart Message -->
+		<div th:if="${cartItems == null or #lists.isEmpty(cartItems)}"
+			class="empty-cart">
+			<h2>Your cart is empty 🛍️</h2>
+			<p>Looks like you haven’t added anything yet. Start exploring our
+				eco-friendly products!</p>
+			<a th:href="@{/customerhome}">Browse Products</a>
+		</div>
+
+		<a th:href="@{/customerhome}" class="continue">← Continue Shopping</a>
+	</main>
+
+	<script>
+const SHIPPING_FEE = 40;
+function updateSummary() {
+  let subtotal = 0;
+  document.querySelectorAll('tr').forEach(row => {
+    const priceSpan = row.querySelector('.total-price');
+    if(priceSpan) {
+      const priceText = priceSpan.textContent.replace(/,/g, '');
+      subtotal += parseInt(priceText) || 0;
+    }
+  });
+  const total = subtotal + SHIPPING_FEE;
+  document.getElementById('subtotal').textContent = subtotal.toLocaleString('en-IN');
+  document.getElementById('total').textContent = total.toLocaleString('en-IN');
+}
+document.querySelectorAll('.qty-input').forEach(input => {
+  input.addEventListener('change', function() {
+    const price = parseFloat(this.getAttribute('data-price'));
+    const quantity = parseInt(this.value);
+    const totalPrice = price * quantity;
+    const row = this.closest('tr');
+    const totalPriceSpan = row.querySelector('.total-price');
+    totalPriceSpan.textContent = totalPrice.toLocaleString('en-IN');
+    const hiddenQty = row.querySelector('.qty-hidden');
+    hiddenQty.value = quantity;
+    updateSummary();
+  });
+});
+updateSummary();
+</script>
+</body>
+</html>

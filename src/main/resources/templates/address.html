@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoNova | Delivery Address</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            background: #fff;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #27ae60;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: #27ae60;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="tel"] {
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 6px;
+            margin-top: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="tel"]:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .back:hover {
+            color: #2980b9;
+        }
+
+        .success-alert {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .error-alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #f5c6cb;
+        }
+
+        .address-card {
+            border: 2px solid #e1e8ed;
+            padding: 15px;
+            margin-top: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .address-card:hover {
+            border-color: #27ae60;
+            background-color: #f9fef8;
+        }
+
+        .address-card input[type="radio"] {
+            transform: scale(1.3);
+            margin-top: 5px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .address-card.selected {
+            border-color: #27ae60;
+            background-color: #f0f7ff;
+        }
+
+        .address-content {
+            flex: 1;
+        }
+
+        .address-content strong {
+            color: #2c3e50;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .address-content span {
+            color: #7f8c8d;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .select-btn {
+            background-color: #27ae60;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .select-btn:hover {
+            background-color: #229954;
+        }
+
+        .select-btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .address-card {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="~{fragments/header :: navbar}"></div>
+
+    <div class="container">
+        <h2>🏠 Delivery Address</h2>
+
+        <!-- Success/Error Messages -->
+        <div th:if="${successMessage}" class="success-alert">
+            <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="error-alert">
+            <span th:text="${errorMessage}"></span>
+        </div>
+
+        <!-- Add New Address Form -->
+        <form th:action="@{/address/save}" th:object="${address}" method="post">
+            <h3>Add New Address</h3>
+
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" th:field="*{fullName}" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" th:field="*{phone}" required>
+
+            <label for="street">Street:</label>
+            <input type="text" id="street" th:field="*{street}" required>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" th:field="*{city}" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" th:field="*{state}" required>
+
+            <label for="buildingName">Building Name:</label>
+            <input type="text" id="buildingName" th:field="*{buildingName}">
+
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" th:field="*{pincode}" required>
+
+            <label for="landmark">Landmark:</label>
+            <input type="text" id="landmark" th:field="*{landmark}">
+
+            <button type="submit">Save Address</button>
+        </form>
+
+        <!-- Select Saved Address and Proceed to Payment -->
+        <h3>Select Delivery Address</h3>
+        <div th:if="${#lists.isEmpty(addresses)}" style="text-align: center; color: #7f8c8d; padding: 20px;">
+            <p>No saved addresses. Please add one above.</p>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(addresses)}">
+            <form th:action="@{/address/select}" method="post" id="addressForm">
+                <div th:each="addr : ${addresses}" class="address-card" onclick="selectAddress(this, event)">
+                    <input type="radio" name="addressId" th:value="${addr.id}" required>
+                    <div class="address-content">
+                        <strong th:text="${addr.fullName}"></strong>
+                        <span th:text="${addr.street} + ', ' + ${addr.buildingName} + ', ' + ${addr.city} + ' - ' + ${addr.pincode}"></span><br>
+                        <span th:text="'Phone: ' + ${addr.phone}"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="select-btn" id="proceedBtn">✅ Proceed to Payment</button>
+            </form>
+        </div>
+
+        <a th:href="@{/cart/view}" class="back">← Back to Cart</a>
+    </div>
+
+    <script>
+        // Highlight selected address card
+        function selectAddress(element) {
+            document.querySelectorAll('.address-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            element.querySelector('input[type="radio"]').checked = true;
+        }
+
+        // Pre-select first address on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstCard = document.querySelector('.address-card');
+            if (firstCard) {
+                firstCard.classList.add('selected');
+                firstCard.querySelector('input[type="radio"]').checked = true;
+            }
+        });
+    </script>
+</body>
+
+</html>
