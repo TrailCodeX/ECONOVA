@@ -23,7 +23,7 @@
 
       ```bash
       mvn spring-boot:run
-      ```
+    
    4. Visit `http://localhost:8080`
 
    ---
