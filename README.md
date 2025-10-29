@@ -16,7 +16,7 @@
    1. Clone this repository  
       ```bash
       git clone https://github.com/TrailCodeX/ECONOVA.git
-     ````
+ 
 
    2. Open in your IDE
    3. Run using:
